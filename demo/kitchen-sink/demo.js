@@ -69,6 +69,12 @@ var ElasticTabstopsLite = require("ace/ext/elastic_tabstops_lite").ElasticTabsto
 
 var IncrementalSearch = require("ace/incremental_search").IncrementalSearch;
 
+
+var workerModule = require("ace/worker/worker_client");
+if (location.href.indexOf("noworker") !== -1) {
+    workerModule.WorkerClient = workerModule.UIWorkerClient;
+}
+
 /*********** create editor ***************************/
 var container = document.getElementById("editor-container");
 
@@ -424,6 +430,9 @@ bindCheckbox("fade_fold_widgets", function(checked) {
 bindCheckbox("read_only", function(checked) {
     env.editor.setReadOnly(checked);
 });
+bindCheckbox("scrollPastEnd", function(checked) {
+    env.editor.setOption("scrollPastEnd", checked);
+});
 
 bindDropdown("split", function(value) {
     var sp = env.split;
@@ -511,10 +520,10 @@ new StatusBar(env.editor, cmdLine.container);
 
 
 var Emmet = require("ace/ext/emmet");
-net.loadScript("https://rawgithub.com/nightwing/emmet-core/master/emmet.js", function() {
+net.loadScript("http://nightwing.github.io/emmet-core/emmet.js", function() {
     Emmet.setCore(window.emmet);
     env.editor.setOption("enableEmmet", true);
-})
+});
 
 
 // require("ace/placeholder").PlaceHolder;
